@@ -15,10 +15,10 @@ class SingleHeadAttention(nn.Module):
         K, Q, V = self.W_k(x), self.W_q(x), self.W_v(x)
         scale = K.shape[-1] ** 0.5
         
-        # బ్యాచ్డ్ మ్యాట్రిక్స్ మల్టిప్లికేషన్
+        
         attn_scores = (Q @ K.transpose(-2, -1)) / scale
         
-        # మాస్కింగ్ పద్ధతి
+        
         seq_len = x.shape[1]
         mask = torch.triu(torch.ones(seq_len, seq_len, device=x.device), diagonal=1).bool()
         attn_scores.masked_fill_(mask, float('-inf'))
@@ -70,7 +70,7 @@ class TransformerBlock(nn.Module):
 
     def forward(self, embedded: TensorType[float]) -> TensorType[float]:
         torch.manual_seed(0)
-        # రెసిడ్యువల్ కనెక్షన్లు మరియు నార్మలైజేషన్
+        
         h = embedded + self.attn_layer(self.norm1(embedded))
         out = h + self.ffn_layer(self.norm2(h))
         return torch.round(out, decimals=4)
